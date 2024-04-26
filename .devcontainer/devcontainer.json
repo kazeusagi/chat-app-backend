@@ -1,0 +1,14 @@
+{
+  "name": "Chat App Frontend",
+  "dockerComposeFile": "compose.yml",
+  "service": "app",
+  "workspaceFolder": "/home/user/app",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "oderwat.indent-rainbow",
+        "ms-azuretools.vscode-docker"
+      ]
+    }
+  }
+}
