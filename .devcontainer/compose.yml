@@ -4,7 +4,9 @@ services:
   backend-app:
     build: 
       context: .
-      dockerfile: Dockerfile.bun
+      dockerfile: Dockerfile.node
+    env_file:
+      - .env
     tty: true
     volumes:
       - ../:/home/user/app
