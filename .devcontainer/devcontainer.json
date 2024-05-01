@@ -1,13 +1,14 @@
 {
-  "name": "Chat App Frontend",
+  "name": "Chat App Backend",
   "dockerComposeFile": "compose.yml",
-  "service": "app",
+  "service": "backend-app",
   "workspaceFolder": "/home/user/app",
   "customizations": {
     "vscode": {
       "extensions": [
         "oderwat.indent-rainbow",
-        "ms-azuretools.vscode-docker"
+        "ms-azuretools.vscode-docker",
+        "humao.rest-client"
       ]
     }
   }
