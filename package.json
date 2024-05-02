@@ -3,8 +3,7 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "npm run app.ts",
-    "lint": "eslint src/*.ts --no-ignore"
+    "dev": "node dist/server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -15,7 +14,6 @@
     "@eslint/js": "^9.1.1",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
-    "eslint": "^9.1.1",
     "prettier": "^3.2.5"
   },
   "peerDependencies": {

@@ -9,7 +9,8 @@
         "oderwat.indent-rainbow",
         "ms-azuretools.vscode-docker",
         "humao.rest-client",
-        "esbenp.prettier-vscode"
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint"
       ]
     }
   }

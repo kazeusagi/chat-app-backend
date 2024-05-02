@@ -1,2 +1,2 @@
-POST http://localhost:3333/chat
+POST http://localhost:3333/aa
 content-type: application/json
