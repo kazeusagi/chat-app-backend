@@ -1,8 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import OpenAI from 'openai';
+import { PrismaClient } from '@prisma/client';
 
 const openai = new OpenAI();
+const prisma = new PrismaClient();
 
 const app = express();
 const port = 3333;
@@ -20,6 +22,12 @@ app.use(cors({ origin: 'http://localhost:3000' }));
 // ルーティング
 app.get('/', async (req: any, res: any) => {
   res.send('Welcome');
+  const user = await prisma.user.create({
+    data: {
+      name: 'Alice',
+      email: 'alice@prisma.io',
+    },
+  });
 });
 
 app.post('/aa', async (req: any, res: any) => {
