@@ -6,7 +6,7 @@
     "dev": "node dist/server.js",
     "build": "tsc",
     "prisma": "prisma studio",
-    "migrate": "prisma migrate dev --name init"
+    "migrate": "prisma migrate dev"
   },
   "dependencies": {
     "@prisma/client": "^5.13.0",
