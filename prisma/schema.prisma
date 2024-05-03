@@ -11,6 +11,7 @@ model User {
   id      Int      @id @default(autoincrement())
   email   String   @unique
   name    String?
+
 }
 
 model Message {
@@ -18,9 +19,17 @@ model Message {
   content String
   chat    Chat     @relation(fields: [chatId], references: [id])
   chatId  Int
+  // role    Role     @relation(fields: [roleId], references: [id]) 
+  // roleId  Int
 }
 
 model Chat {
   id       Int       @id @default(autoincrement())
   messages Message[]
+}
+
+model Role {
+  id      Int        @id @default(autoincrement())
+  name    String
+  // messages Message[]
 }
