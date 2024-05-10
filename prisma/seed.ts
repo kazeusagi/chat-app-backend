@@ -1,8 +1,10 @@
+import { Role } from '@/types';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 async function main() {
+  const role: Role = {};
   // roleの初期化
   const roles = [
     { id: 1, name: 'user' },

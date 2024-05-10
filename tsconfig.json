@@ -1,12 +1,17 @@
 {
   "compilerOptions": {
     "lib": ["esnext"],
-    "target": "ESNext",
-
+    "target": "ES6",
+    "module": "CommonJS",
+    "moduleResolution": "node",
     "strict": true,
-    "esModuleInterop": true,
-    "moduleResolution": "bundler",
-
-    "outDir": "dist"
+    "esModuleInterop": false,
+    "outDir": "dist",
+    "extendedDiagnostics": false,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   }
 }

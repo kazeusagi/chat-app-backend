@@ -1,7 +1,0 @@
-curl -X POST http://localhost:3333/aa -H "Accept: application/jnon" -H "Content-type: application/json" -d '{"name": "ito"}'
-
-curl -X POST http://localhost:3333/chat -H "Accept: application/jnon" -H "Content-type: application/json" -d '{"message": "pythonについて教えて"}'
-
-
-
-GET http://localhost:3333
