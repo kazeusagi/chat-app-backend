@@ -1,5 +1,20 @@
+// @prisma/clientの生成
 generator client {
   provider = "prisma-client-js"
+}
+
+// テーブル同士の関係性に焦点を当てたER図を出力
+generator erdSimple {
+  provider  = "prisma-erd-generator"
+  output    = "../docs/er_simple.md"
+  tableOnly = true
+}
+
+// 詳細なER図を出力
+generator erdDetail {
+  provider                  = "prisma-erd-generator"
+  output                    = "../docs/er_detail.md"
+  includeRelationFromFields = true
 }
 
 datasource db {
@@ -7,10 +22,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum RoleEnum {
+  system
+  user
+  assistant
+}
+
+model Role {
+  id    Int      @id @default(autoincrement())
+  name  RoleEnum
+  users User[]
+}
+
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id           Int       @id @default(autoincrement())
+  name         String
+  role         Role      @relation(fields: [roleId], references: [id])
+  roleId       Int
+  joinedChats  Chat[]
+  sentMessages Message[]
 }
 
 model Message {
@@ -18,17 +48,12 @@ model Message {
   content String
   chat    Chat   @relation(fields: [chatId], references: [id])
   chatId  Int
-  // role    Role     @relation(fields: [roleId], references: [id]) 
-  // roleId  Int
+  user    User   @relation(fields: [userId], references: [id])
+  userId  Int
 }
 
 model Chat {
   id       Int       @id @default(autoincrement())
+  member   User[]
   messages Message[]
-}
-
-model Role {
-  id   Int    @id @default(autoincrement())
-  name String
-  // messages Message[]
 }
