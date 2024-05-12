@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { role } from './role';
 import { user } from './user';
+import { Controller } from 'tsoa/dist/index';
 
 const prisma = new PrismaClient();
 
@@ -21,3 +22,5 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
+
+export class UsersController extends Controller {}
