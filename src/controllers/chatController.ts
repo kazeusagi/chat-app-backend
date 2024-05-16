@@ -1,18 +1,27 @@
 import { Body, Controller, Get, Path, Post, Query, Route, SuccessResponse } from 'tsoa/dist/index';
 import { RoleEnumType } from '@/types';
+import { Chat, PrismaClient } from '@prisma/client';
 
-@Route('users')
-export class UsersController extends Controller {
-  @Get('{userId}')
-  public async getUser(@Path() userId: number, @Query() name?: string) {
-    const a: RoleEnumType = 'assistant';
-    const user = { id: 1, name: 'puuko' };
-    return user;
+@Route('chat')
+export class ChatController extends Controller {
+  prisma = new PrismaClient();
+
+  /**
+   * @summary 単一チャットの取得
+   * @param chatId 対象のチャットId
+   */
+  @Get('{chatId}')
+  public async getChat(@Path() chatId: number) {
+    const chat = await this.prisma.chat.findUnique({ where: { id: chatId } });
+    return chat;
   }
 
+  /**
+   * @summary 単一チャットの作成
+   */
   @SuccessResponse('201', 'Created') // Custom success response
-  @Post()
-  public async createUser(): Promise<void> {
+  @Post('/')
+  public async createChat(): Promise<void> {
     this.setStatus(201); // set return status 201
     return;
   }
