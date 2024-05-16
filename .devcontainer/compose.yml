@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   backend-app:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile.node
     env_file:
@@ -12,6 +12,8 @@ services:
       - ../:/home/user/app
     networks:
       - chat-app-network
+    environment:
+      - CHOKIDAR_USEPOLLING=true
 
 networks:
   chat-app-network:

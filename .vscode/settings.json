@@ -4,5 +4,6 @@
     "editor.defaultFormatter": "Prisma.prisma"
   },
   "editor.formatOnSave": true,
-  "typescript.tsserver.log": "verbose"
+  "typescript.tsserver.log": "verbose",
+  "editor.colorDecorators": true
 }
