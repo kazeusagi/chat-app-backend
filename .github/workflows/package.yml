@@ -28,7 +28,10 @@ jobs:
       #   run: npm install
       # - name: Build
       #   run: npm run build
-      - name: publish npm package
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: publish npm package
+      #   working-directory: package
+      #   run: npm publish
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: ls
+        run: ls -la
