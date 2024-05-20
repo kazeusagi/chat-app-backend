@@ -1,14 +1,19 @@
 {
-  "name": "express",
+  "name": "chatapp-api",
+  "description": "チャットアプリのAPI",
+  "version": "1.0.0",
   "module": "index.ts",
   "scripts": {
-    "dev": "concurrently \"nodemon\" \"nodemon -x tsoa spec-and-routes\"",
+    "dev": "concurrently \"npm run dev:ts\" \"npm run dev:json\"",
+    "dev:ts": "nodemon -x npm run tsoa --watch src --ext ts",
+    "dev:json": "nodemon -x tsx src/server.ts --watch tsoa --ext json",
     "build": "tsoa spec-and-routes && tsc",
     "start": "node dist/src/server.js",
+    "tsoa": "tsoa spec-and-routes && prettier --write tsoa/swagger.json",
     "prisma": "prisma studio",
     "migrate": "prisma migrate dev --name ${npm_config_name:-dev}",
     "seed": "tsx prisma/seed/seed.ts",
-    "tsoa": "tsoa spec-and-routes"
+    "lint": "spectral lint tsoa/swagger.json --ruleset .spectral.yaml"
   },
   "dependencies": {
     "@prisma/client": "^5.13.0",
@@ -19,6 +24,7 @@
     "tsoa": "^6.2.1"
   },
   "devDependencies": {
+    "@stoplight/spectral-cli": "^6.11.1",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/swagger-ui-express": "^4.1.6",

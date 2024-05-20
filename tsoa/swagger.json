@@ -1,379 +1,391 @@
 {
-	"openapi": "3.0.0",
-	"components": {
-		"examples": {},
-		"headers": {},
-		"parameters": {},
-		"requestBodies": {},
-		"responses": {},
-		"schemas": {
-			"User": {
-				"properties": {
-					"roleId": {
-						"type": "number",
-						"format": "double"
-					},
-					"name": {
-						"type": "string"
-					},
-					"id": {
-						"type": "number",
-						"format": "double"
-					}
-				},
-				"required": [
-					"roleId",
-					"name",
-					"id"
-				],
-				"type": "object"
-			},
-			"askProps": {
-				"properties": {
-					"systemMessage": {
-						"type": "string"
-					},
-					"userMessage": {
-						"type": "string"
-					},
-					"chatId": {
-						"type": "number",
-						"format": "double"
-					}
-				},
-				"required": [
-					"userMessage"
-				],
-				"type": "object"
-			}
-		},
-		"securitySchemes": {}
-	},
-	"info": {
-		"title": "express",
-		"contact": {}
-	},
-	"paths": {
-		"/user/{userId}": {
-			"get": {
-				"operationId": "GetUser",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"allOf": [
-										{
-											"$ref": "#/components/schemas/User"
-										}
-									],
-									"nullable": true
-								}
-							}
-						}
-					}
-				},
-				"summary": "指定したIDのユーザー情報を取得",
-				"tags": [
-					"User"
-				],
-				"security": [],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "userId",
-						"required": true,
-						"schema": {
-							"format": "double",
-							"type": "number"
-						}
-					}
-				]
-			}
-		},
-		"/user": {
-			"post": {
-				"operationId": "CreateUser",
-				"responses": {
-					"201": {
-						"description": "Created"
-					}
-				},
-				"summary": "ユーザーの作成",
-				"tags": [
-					"User"
-				],
-				"security": [],
-				"parameters": []
-			}
-		},
-		"/openai/ask": {
-			"post": {
-				"operationId": "PostAsk",
-				"responses": {
-					"200": {
-						"description": "ChatCompletion",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "string"
-								},
-								"examples": {
-									"Example 1": {
-										"value": {
-											"chatId": 1,
-											"systemMessage": "厳かな感じでお願いします。",
-											"userMessage": "こんにちは"
-										}
-									}
-								}
-							}
-						}
-					}
-				},
-				"summary": "OpenAIにリクエスト送信",
-				"tags": [
-					"OpenAI"
-				],
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/askProps"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/messages/{chatId}": {
-			"get": {
-				"operationId": "GetMessages",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"items": {
-										"properties": {
-											"id": {
-												"type": "number",
-												"format": "double"
-											}
-										},
-										"required": [
-											"id"
-										],
-										"type": "object"
-									},
-									"type": "array"
-								}
-							}
-						}
-					}
-				},
-				"summary": "指定したチャット内の全てのメッサージを取得",
-				"tags": [
-					"Message"
-				],
-				"security": [],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "chatId",
-						"required": true,
-						"schema": {
-							"format": "double",
-							"type": "number"
-						}
-					}
-				]
-			}
-		},
-		"/message/{messageId}": {
-			"get": {
-				"operationId": "GetMessage",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"properties": {
-										"name": {
-											"type": "string"
-										},
-										"id": {
-											"type": "number",
-											"format": "double"
-										}
-									},
-									"required": [
-										"name",
-										"id"
-									],
-									"type": "object"
-								}
-							}
-						}
-					}
-				},
-				"summary": "指定したIDのメッセージを取得",
-				"tags": [
-					"Message"
-				],
-				"security": [],
-				"parameters": [
-					{
-						"description": "対象のメッセージId",
-						"in": "path",
-						"name": "messageId",
-						"required": true,
-						"schema": {
-							"format": "double",
-							"type": "number"
-						}
-					},
-					{
-						"in": "query",
-						"name": "name",
-						"required": false,
-						"schema": {
-							"type": "string"
-						}
-					}
-				]
-			}
-		},
-		"/message": {
-			"post": {
-				"operationId": "CreateMessage",
-				"responses": {
-					"201": {
-						"description": "Created"
-					}
-				},
-				"summary": "メッセージの作成",
-				"tags": [
-					"Message"
-				],
-				"security": [],
-				"parameters": []
-			}
-		},
-		"/chats/{userId}": {
-			"get": {
-				"operationId": "GetChats",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"items": {
-										"properties": {
-											"id": {
-												"type": "number",
-												"format": "double"
-											}
-										},
-										"required": [
-											"id"
-										],
-										"type": "object"
-									},
-									"type": "array"
-								}
-							}
-						}
-					}
-				},
-				"summary": "指定したユーザーの全てのチャット一覧を取得",
-				"tags": [
-					"Chat"
-				],
-				"security": [],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "userId",
-						"required": true,
-						"schema": {
-							"format": "double",
-							"type": "number"
-						}
-					}
-				]
-			}
-		},
-		"/chat/{chatId}": {
-			"get": {
-				"operationId": "GetChat",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"properties": {
-										"id": {
-											"type": "number",
-											"format": "double"
-										}
-									},
-									"required": [
-										"id"
-									],
-									"type": "object"
-								}
-							}
-						}
-					}
-				},
-				"summary": "指定したIDのチャット情報を取得",
-				"tags": [
-					"Chat"
-				],
-				"security": [],
-				"parameters": [
-					{
-						"description": "対象のチャットId",
-						"in": "path",
-						"name": "chatId",
-						"required": true,
-						"schema": {
-							"format": "double",
-							"type": "number"
-						}
-					}
-				]
-			}
-		},
-		"/chat": {
-			"post": {
-				"operationId": "CreateChat",
-				"responses": {
-					"201": {
-						"description": "Created"
-					}
-				},
-				"summary": "チャットの作成",
-				"tags": [
-					"Chat"
-				],
-				"security": [],
-				"parameters": []
-			}
-		}
-	},
-	"servers": [
-		{
-			"url": "/"
-		}
-	]
+  "openapi": "3.0.0",
+  "components": {
+    "examples": {},
+    "headers": {},
+    "parameters": {},
+    "requestBodies": {},
+    "responses": {},
+    "schemas": {
+      "User": {
+        "properties": {
+          "roleId": {
+            "type": "number",
+            "format": "double"
+          },
+          "name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": ["roleId", "name", "id"],
+        "type": "object"
+      },
+      "askProps": {
+        "properties": {
+          "systemMessage": {
+            "type": "string"
+          },
+          "userMessage": {
+            "type": "string"
+          },
+          "chatId": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": ["userMessage"],
+        "type": "object"
+      }
+    },
+    "securitySchemes": {}
+  },
+  "info": {
+    "title": "chatapp-api",
+    "version": "1.0.0",
+    "description": "チャットアプリのAPI",
+    "contact": {}
+  },
+  "paths": {
+    "/user/{userId}": {
+      "get": {
+        "operationId": "GetUser",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  ],
+                  "nullable": true
+                }
+              }
+            }
+          }
+        },
+        "description": "指定したIDのユーザー情報を取得",
+        "summary": "ユーザー情報取得",
+        "tags": ["User"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          }
+        ]
+      }
+    },
+    "/user": {
+      "post": {
+        "operationId": "CreateUser",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "description": "新規ユーザーの作成",
+        "summary": "ユーザー作成",
+        "tags": ["User"],
+        "security": [],
+        "parameters": []
+      }
+    },
+    "/openai/ask": {
+      "post": {
+        "operationId": "PostAsk",
+        "responses": {
+          "200": {
+            "description": "ChatCompletion",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "OpenAIに質問のリクエストを送信",
+        "summary": "質問リクエスト送信",
+        "tags": ["OpenAI"],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/askProps"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/message/{chatId}": {
+      "get": {
+        "operationId": "GetMessages",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "number",
+                        "format": "double"
+                      }
+                    },
+                    "required": ["name", "id"],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "description": "指定したチャット内の全てのメッサージを取得",
+        "summary": "メッセージ一覧取得",
+        "tags": ["Message"],
+        "security": [],
+        "parameters": [
+          {
+            "description": "対象のチャットId",
+            "in": "path",
+            "name": "chatId",
+            "required": true,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          }
+        ]
+      }
+    },
+    "/message/{chatId}/{messageId}": {
+      "get": {
+        "operationId": "GetMessage",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "number",
+                      "format": "double"
+                    }
+                  },
+                  "required": ["name", "id"],
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "description": "指定したチャットの指定したIDのメッセージを取得",
+        "summary": "メッセージ単体取得",
+        "tags": ["Message"],
+        "security": [],
+        "parameters": [
+          {
+            "description": "対象のチャットId",
+            "in": "path",
+            "name": "chatId",
+            "required": true,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "description": "対象のメッセージId",
+            "in": "path",
+            "name": "messageId",
+            "required": true,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          }
+        ]
+      }
+    },
+    "/chat/{userId}": {
+      "get": {
+        "operationId": "GetChats",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "number",
+                        "format": "double"
+                      }
+                    },
+                    "required": ["name", "id"],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "description": "指定したユーザーの全てのチャット一覧を取得",
+        "summary": "チャット一覧取得",
+        "tags": ["Chat"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          }
+        ]
+      }
+    },
+    "/chat/{userId}/{chatId}": {
+      "get": {
+        "operationId": "GetChat",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "properties": {
+                        "messages": {
+                          "items": {
+                            "properties": {
+                              "userId": {
+                                "type": "number",
+                                "format": "double"
+                              },
+                              "chatId": {
+                                "type": "number",
+                                "format": "double"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "id": {
+                                "type": "number",
+                                "format": "double"
+                              }
+                            },
+                            "required": ["userId", "chatId", "content", "id"],
+                            "type": "object"
+                          },
+                          "type": "array"
+                        }
+                      },
+                      "required": ["messages"],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "number",
+                          "format": "double"
+                        }
+                      },
+                      "required": ["name", "id"],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "description": "指定したユーザーの指定したIDのチャット情報を取得",
+        "summary": "チャット単体取得",
+        "tags": ["Chat"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "description": "対象のユーザーId\n対象のチャットId",
+            "in": "path",
+            "name": "chatId",
+            "required": true,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Chat",
+      "description": "チャット関連"
+    },
+    {
+      "name": "Message",
+      "description": "メッセージ関連"
+    },
+    {
+      "name": "User",
+      "description": "ユーザー関連"
+    },
+    {
+      "name": "OpenAI",
+      "description": "OpenAI関連"
+    }
+  ]
 }

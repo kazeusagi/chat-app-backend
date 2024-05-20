@@ -6,7 +6,8 @@ import { PrismaClient } from '@prisma/client';
 @Tags('User')
 export class UsersController extends Controller {
   /**
-   * @summary 指定したIDのユーザー情報を取得
+   * 指定したIDのユーザー情報を取得
+   * @summary ユーザー情報取得
    */
   @Get('{userId}')
   public async getUser(@Path() userId: number): Promise<User | null> {
@@ -18,7 +19,8 @@ export class UsersController extends Controller {
   }
 
   /**
-   * @summary ユーザーの作成
+   * 新規ユーザーの作成
+   * @summary ユーザー作成
    */
   @SuccessResponse('201', 'Created') // Custom success responsea
   @Post()

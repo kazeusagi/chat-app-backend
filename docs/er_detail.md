@@ -30,6 +30,7 @@ assistant assistant
 
   "Chat" {
     Int id "🗝️"
+    String name 
     }
   
     "Role" o|--|| "RoleEnum" : "enum:name"
@@ -39,6 +40,6 @@ assistant assistant
     "User" o{--}o "Message" : "sentMessages"
     "Message" o|--|| "Chat" : "chat"
     "Message" o|--|| "User" : "user"
-    "Chat" o{--}o "User" : "member"
+    "Chat" o{--}o "User" : "members"
     "Chat" o{--}o "Message" : "messages"
 ```

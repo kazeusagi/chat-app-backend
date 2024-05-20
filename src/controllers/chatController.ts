@@ -11,30 +11,41 @@ import {
 } from 'tsoa/dist/index';
 import { RoleEnumType } from '@/types';
 import { Chat, PrismaClient } from '@prisma/client';
+import { test } from '@common/index';
 
 @Route('chat')
 export class ChatController extends Controller {
   prisma = new PrismaClient();
 
   /**
-   * @summary 指定したIDのチャット情報を取得
-   * @param chatId 対象のチャットId
+   * 指定したユーザーの全てのチャット一覧を取得
+   * @summary チャット一覧取得
+   * @param chatId 対象のユーザーId
    */
-  @Get('{chatId}')
+  @Get('{userId}')
   @Tags('Chat')
-  public async getChat(@Path() chatId: number) {
-    const chat = await this.prisma.chat.findUnique({ where: { id: chatId } });
-    return chat;
+  public async getChats(@Path() userId: number) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      include: { joinedChats: true },
+    });
+    const chats = user?.joinedChats;
+    return chats;
   }
 
   /**
-   * @summary チャットの作成
+   * 指定したユーザーの指定したIDのチャット情報を取得
+   * @summary チャット単体取得
+   * @param chatId 対象のユーザーId
+   * @param chatId 対象のチャットId
    */
-  @SuccessResponse('201', 'Created') // Custom success response
-  @Post('/')
+  @Get('{userId}/{chatId}')
   @Tags('Chat')
-  public async createChat(): Promise<void> {
-    this.setStatus(201); // set return status 201
-    return;
+  public async getChat(@Path() userId: number, @Path() chatId: number) {
+    const chat = await this.prisma.chat.findUnique({
+      where: { id: chatId, members: { some: { id: userId } } },
+      include: { messages: true },
+    });
+    return chat;
   }
 }

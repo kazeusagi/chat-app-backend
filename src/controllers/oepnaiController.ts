@@ -10,7 +10,7 @@ import {
   SuccessResponse,
   Tags,
 } from 'tsoa/dist/index';
-import { Chat, Message, Prisma, PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import OpenAI from 'openai';
 import { RoleEnum, getRoleName } from '@/types';
 
@@ -26,14 +26,10 @@ export class OpenAiController extends Controller {
   openai = new OpenAI();
 
   /**
-   * @summary OpenAIにリクエスト送信
+   * OpenAIに質問のリクエストを送信
+   * @summary 質問リクエスト送信
    * @returns ChatCompletion
    */
-  @Example<askProps>({
-    chatId: 1,
-    systemMessage: '厳かな感じでお願いします。',
-    userMessage: 'こんにちは',
-  })
   @Tags('OpenAI')
   @Post('ask')
   public async postAsk(@Body() body: askProps) {
@@ -73,7 +69,7 @@ export class OpenAiController extends Controller {
     // DBに保存
     // chatが無い場合は新規作成
     if (body.chatId == null || chat == null) {
-      body.chatId = (await this.prisma.chat.create({})).id;
+      body.chatId = (await this.prisma.chat.create({ data: { name: '新規' } })).id;
     }
     // assistantMessageの保存
     const a: Prisma.MessageCreateInput = {
