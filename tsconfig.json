@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "incremental": true,
-    "lib": ["esnext"],
+    "lib": ["ESNext"],
     "target": "ES6",
     "module": "CommonJS",
     "moduleResolution": "node",
@@ -11,7 +11,8 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@common/*": ["package/*"]
     },
     "experimentalDecorators": true,
     "resolveJsonModule": true
