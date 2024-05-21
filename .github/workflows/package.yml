@@ -6,7 +6,7 @@ on:
 
 defaults:
   run:
-    working-directory: package
+    working-directory: .
 
 jobs:
   publish:
@@ -24,14 +24,15 @@ jobs:
         with:
           node-version: '20'
           registry-url: https://npm.pkg.github.com
+      - name: cd package
+        run: cd package
       # - name: Install → ビルドを行うためdevDependenciesもインストールする
       #   run: npm install
       # - name: Build
       #   run: npm run build
-      # - name: publish npm package
-      #   working-directory: package
-      #   run: npm publish
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: ls
         run: ls -la
+      - name: publish npm package
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
