@@ -1,9 +1,13 @@
 {
   "name": "@kazeusagi/chat-app-backend",
   "description": "共通で利用する型定義パッケージ",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
-  "scripts": {},
+  "scripts": {
+    "patch": "npm version patch",
+    "minor": "npm version minor",
+    "major": "npm version major"
+  },
   "files": [
     "index.d.ts"
   ]
