@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Path, Post, Query, Route, SuccessResponse } from 'tsoa/dist/index';
+import {
+  Body,
+  Controller,
+  Get,
+  Path,
+  Post,
+  Query,
+  Route,
+  SuccessResponse,
+  Tags,
+} from 'tsoa/dist/index';
 import { Chat, PrismaClient } from '@prisma/client';
 
 export interface ResponseType {
@@ -10,22 +20,30 @@ export class MessageController extends Controller {
   prisma = new PrismaClient();
 
   /**
-   * @summary 単一メッセージの取得
-   * @param messageId 対象のメッセージId
+   * 指定したチャット内の全てのメッサージを取得
+   * @summary メッセージ一覧取得
+   * @param chatId 対象のチャットId
    */
-  @Get('{messageId}')
-  public async getMessage(@Path() messageId: number, @Query() name?: string) {
-    const user = { id: 1, name: 'puuko' };
-    return user;
+  @Get('{chatId}')
+  @Tags('Message')
+  public async getMessages(@Path() chatId: number) {
+    const user = await this.prisma.user.findFirst({
+      where: { id: chatId },
+      include: { joinedChats: true },
+    });
+    return user?.joinedChats;
   }
 
   /**
-   * @summary 単一メッセージの作成
+   * 指定したチャットの指定したIDのメッセージを取得
+   * @summary メッセージ単体取得
+   * @param chatId 対象のチャットId
+   * @param messageId 対象のメッセージId
    */
-  @SuccessResponse('201', 'Created') // Custom success response
-  @Post('/')
-  public async createMessage(): Promise<void> {
-    this.setStatus(201); // set return status 201
-    return;
+  @Get('{chatId}/{messageId}')
+  @Tags('Message')
+  public async getMessage(@Path() chatId: number, @Path() messageId: number) {
+    const user = { id: 1, name: 'puuko' };
+    return user;
   }
 }

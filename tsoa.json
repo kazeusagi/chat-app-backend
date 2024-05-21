@@ -4,7 +4,25 @@
   "controllerPathGlobs": ["src/controllers/*Controller.ts"],
   "spec": {
     "outputDirectory": "tsoa",
-    "specVersion": 3
+    "specVersion": 3,
+    "tags": [
+      {
+        "name": "Chat",
+        "description": "チャット関連"
+      },
+      {
+        "name": "Message",
+        "description": "メッセージ関連"
+      },
+      {
+        "name": "User",
+        "description": "ユーザー関連"
+      },
+      {
+        "name": "OpenAI",
+        "description": "OpenAI関連"
+      }
+    ]
   },
   "routes": {
     "routesDir": "tsoa"

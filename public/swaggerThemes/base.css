@@ -18,6 +18,21 @@
 .swagger-ui .opblock .opblock-summary-description {
   color: var(--secondary-text-color);
 }
+/* tagヘッダ */
+.swagger-ui .opblock-tag-section .opblock-tag {
+  border-bottom: 1px solid var(--block-border-color);
+  border-radius: 2px;
+  background-color: var(--block-bg-color);
+}
+.swagger-ui .opblock-tag-section.is-open .opblock-tag {
+  background-color: var(--header-bg-color);
+}
+.swagger-ui .opblock-tag-section .opblock-tag:hover {
+  background-color: var(--block-bg-color) !important;
+}
+.swagger-ui .opblock-tag-section .opblock-tag .renderedMarkdown {
+  color: var(--secondary-text-color);
+}
 
 /* https://github.com/oqo0/swagger-themes */
 @media (prefers-color-scheme: dark) {
@@ -45,9 +60,6 @@
 
   .swagger-ui .btn.authorize {
     color: var(--post-method-color);
-  }
-
-  .swagger-ui .btn.authorize {
     border-color: var(--post-method-color);
   }
 
