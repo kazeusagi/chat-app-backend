@@ -11,8 +11,7 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@common/*": ["package/*"]
+      "@/*": ["src/*"]
     },
     "experimentalDecorators": true,
     "resolveJsonModule": true

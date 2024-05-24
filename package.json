@@ -13,7 +13,8 @@
     "prisma": "prisma studio",
     "migrate": "prisma migrate dev --name ${npm_config_name:-dev}",
     "seed": "tsx prisma/seed/seed.ts",
-    "lint": "spectral lint tsoa/swagger.json --ruleset .spectral.yaml"
+    "lint": "spectral lint tsoa/swagger.json --ruleset .spectral.yaml",
+    "types": "npm i github:kazeusagi/chat-app-types"
   },
   "dependencies": {
     "@prisma/client": "^5.13.0",
@@ -24,6 +25,7 @@
     "tsoa": "^6.2.1"
   },
   "devDependencies": {
+    "@kazeusagi/chat-app-types": "github:kazeusagi/chat-app-types",
     "@stoplight/spectral-cli": "^6.11.1",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
