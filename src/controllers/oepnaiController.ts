@@ -32,7 +32,7 @@ export class OpenAiController extends Controller {
    */
   @Tags('OpenAI')
   @Post('ask')
-  public async postAsk(@Body() body: askProps) {
+  public async postAsk(@Body() body: askProps): Promise<String> {
     const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [];
     // systemMessageがあったら追加
     if (body.systemMessage) {

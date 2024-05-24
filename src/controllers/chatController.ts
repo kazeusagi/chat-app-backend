@@ -11,8 +11,6 @@ import {
 } from 'tsoa/dist/index';
 import { RoleEnumType } from '@/types';
 import { Chat, PrismaClient } from '@prisma/client';
-import { test } from '@common/index';
-
 @Route('chat')
 export class ChatController extends Controller {
   prisma = new PrismaClient();
