@@ -28,23 +28,31 @@ export class OpenAiController extends Controller {
   /**
    * OpenAIに質問のリクエストを送信
    * @summary 質問リクエスト送信
-   * @returns ChatCompletion
+   * @returns askReturn
    */
   @Tags('OpenAI')
   @Post('ask')
-  public async postAsk(@Body() body: askProps) {
-    const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [];
-    // systemMessageがあったら追加
-    if (body.systemMessage) {
-      messages.push({ role: getRoleName(RoleEnum.system), content: body.systemMessage });
+  public async postAsk(@Body() { userMessage, systemMessage, chatId }: askProps): Promise<string> {
+    // chatIdが無ければ新規作成
+    if (chatId == null) {
+      chatId = (await this.prisma.chat.create({ data: { name: '新規' } })).id;
     }
-    // 履歴があれば追加
+    // chatの取得
     const chat = await this.prisma.chat.findUnique({
-      where: { id: body.chatId },
+      where: { id: chatId },
       include: {
         messages: { include: { user: { include: { role: true } } } }, // ユーザーのロール情報も取得
       },
     });
+    if (chat == null) throw new Error(`chatId: ${chatId} のチャットが見つかりませんでした。`);
+
+    // paramの作成
+    const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [];
+    // systemMessageがあったら追加
+    if (systemMessage) {
+      messages.push({ role: getRoleName(RoleEnum.system), content: systemMessage });
+    }
+    // 履歴があれば追加
     if (chat && chat.messages.length > 0) {
       messages.push(
         ...chat.messages.map((message) => ({
@@ -54,7 +62,7 @@ export class OpenAiController extends Controller {
       );
     }
     // ユーザーメッセージを追加
-    messages.push({ role: getRoleName(RoleEnum.user), content: body.userMessage });
+    messages.push({ role: getRoleName(RoleEnum.user), content: userMessage });
 
     // OpenAIにリクエスト送信
     const response = await this.openai.chat.completions.create({
@@ -66,18 +74,24 @@ export class OpenAiController extends Controller {
     const assistantMessage = response.choices[0].message.content;
     if (assistantMessage == null) return '返信がありませんでした。再読込を行ってください。';
 
-    // DBに保存
-    // chatが無い場合は新規作成
-    if (body.chatId == null || chat == null) {
-      body.chatId = (await this.prisma.chat.create({ data: { name: '新規' } })).id;
-    }
-    // assistantMessageの保存
-    const a: Prisma.MessageCreateInput = {
-      content: assistantMessage,
-      user: { connect: { id: 1 } },
-      chat: { connect: { id: body.chatId } },
-    };
-    const b = await this.prisma.message.create({ data: a });
+    // messageの保存
+    const data: Prisma.MessageCreateManyInput[] = [];
+    if (systemMessage) data.push({ content: systemMessage, userId: 2, chatId: chatId });
+    data.push(
+      ...[
+        {
+          content: userMessage,
+          userId: 2,
+          chatId: chatId,
+        },
+        {
+          content: assistantMessage,
+          userId: 2,
+          chatId: chatId,
+        },
+      ],
+    );
+    await this.prisma.message.createMany({ data });
 
     return assistantMessage;
   }

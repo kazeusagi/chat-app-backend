@@ -107,7 +107,7 @@
         "operationId": "PostAsk",
         "responses": {
           "200": {
-            "description": "ChatCompletion",
+            "description": "askReturn",
             "content": {
               "application/json": {
                 "schema": {
