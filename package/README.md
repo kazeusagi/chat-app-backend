@@ -1,0 +1,3 @@
+[![npm version](https://img.shields.io/npm/v/@kazeusagi/chat-app-types.svg)](https://www.npmjs.com/package/@kazeusagi/chat-app-types)
+
+hello
