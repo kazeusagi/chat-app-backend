@@ -3,8 +3,8 @@ erDiagram
 
         RoleEnum {
             system system
-user user
 assistant assistant
+user user
         }
     
   "Role" {

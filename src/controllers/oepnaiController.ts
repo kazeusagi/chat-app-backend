@@ -1,24 +1,8 @@
-import {
-  Body,
-  Controller,
-  Example,
-  Get,
-  Path,
-  Post,
-  Query,
-  Route,
-  SuccessResponse,
-  Tags,
-} from 'tsoa/dist/index';
+import { Body, Controller, Post, Route, Tags } from 'tsoa/dist/index';
 import { Prisma, PrismaClient } from '@prisma/client';
 import OpenAI from 'openai';
-import { RoleEnum, getRoleName } from '@/types';
-
-type askProps = {
-  chatId?: number;
-  userMessage: string;
-  systemMessage?: string;
-};
+import { RoleEnum, UserEnum, getRoleName } from '@/types';
+import { AskProps, AskReturn } from '@kazeusagi/chat-app-types';
 
 @Route('openai')
 export class OpenAiController extends Controller {
@@ -32,10 +16,12 @@ export class OpenAiController extends Controller {
    */
   @Tags('OpenAI')
   @Post('ask')
-  public async postAsk(@Body() { userMessage, systemMessage, chatId }: askProps): Promise<string> {
+  public async postAsk(
+    @Body() { userMessage, systemMessage, chatId }: AskProps,
+  ): Promise<AskReturn> {
     // chatIdが無ければ新規作成
     if (chatId == null) {
-      chatId = (await this.prisma.chat.create({ data: { name: '新規' } })).id;
+      chatId = (await this.prisma.chat.create({ data: { name: 'New Chat' } })).id;
     }
     // chatの取得
     const chat = await this.prisma.chat.findUnique({
@@ -47,14 +33,14 @@ export class OpenAiController extends Controller {
     if (chat == null) throw new Error(`chatId: ${chatId} のチャットが見つかりませんでした。`);
 
     // paramの作成
-    const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [];
+    const paramMessages: OpenAI.Chat.ChatCompletionMessageParam[] = [];
     // systemMessageがあったら追加
     if (systemMessage) {
-      messages.push({ role: getRoleName(RoleEnum.system), content: systemMessage });
+      paramMessages.push({ role: getRoleName(RoleEnum.system), content: systemMessage });
     }
     // 履歴があれば追加
     if (chat && chat.messages.length > 0) {
-      messages.push(
+      paramMessages.push(
         ...chat.messages.map((message) => ({
           role: message.user.role.name,
           content: message.content,
@@ -62,37 +48,29 @@ export class OpenAiController extends Controller {
       );
     }
     // ユーザーメッセージを追加
-    messages.push({ role: getRoleName(RoleEnum.user), content: userMessage });
+    paramMessages.push({ role: getRoleName(RoleEnum.user), content: userMessage });
 
     // OpenAIにリクエスト送信
     const response = await this.openai.chat.completions.create({
-      messages,
+      messages: paramMessages,
       model: 'gpt-3.5-turbo',
     });
 
     // 返答メッセージ
     const assistantMessage = response.choices[0].message.content;
-    if (assistantMessage == null) return '返信がありませんでした。再読込を行ってください。';
+    if (assistantMessage == null) {
+      throw new Error('返信がありませんでした。再読込を行ってください。');
+    }
 
     // messageの保存
-    const data: Prisma.MessageCreateManyInput[] = [];
-    if (systemMessage) data.push({ content: systemMessage, userId: 2, chatId: chatId });
-    data.push(
-      ...[
-        {
-          content: userMessage,
-          userId: 2,
-          chatId: chatId,
-        },
-        {
-          content: assistantMessage,
-          userId: 2,
-          chatId: chatId,
-        },
-      ],
-    );
+    const data: Prisma.MessageCreateManyInput[] = [
+      ...(systemMessage ? [{ content: systemMessage, userId: UserEnum.system, chatId }] : []),
+      { content: userMessage, userId: UserEnum.user, chatId },
+      { content: assistantMessage, userId: UserEnum.assistant, chatId },
+    ];
     await this.prisma.message.createMany({ data });
 
-    return assistantMessage;
+    const askReturn: AskReturn = chat.messages.pop();
+    return askReturn;
   }
 }
