@@ -1,0 +1,16 @@
+{
+  "name": "@kazeusagi/chat-app-types",
+  "version": "0.0.1",
+  "license": "MIT",
+  "main": "index.d.ts",
+  "types": "index.d.ts",
+  "files": [
+    "index.d.ts"
+  ],
+  "exports": {
+    ".": "./index.d.ts"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
