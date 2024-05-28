@@ -24,12 +24,21 @@
         "required": ["roleId", "name", "id"],
         "type": "object"
       },
-      "askProps": {
+      "AskReturn": {
         "properties": {
-          "systemMessage": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": ["message"],
+        "type": "object"
+      },
+      "AskProps": {
+        "properties": {
+          "userMessage": {
             "type": "string"
           },
-          "userMessage": {
+          "systemMessage": {
             "type": "string"
           },
           "chatId": {
@@ -107,11 +116,11 @@
         "operationId": "PostAsk",
         "responses": {
           "200": {
-            "description": "ChatCompletion",
+            "description": "askReturn",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/AskReturn"
                 }
               }
             }
@@ -127,7 +136,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/askProps"
+                "$ref": "#/components/schemas/AskProps"
               }
             }
           }

@@ -10,7 +10,6 @@ import {
   Tags,
 } from 'tsoa/dist/index';
 import { Chat, PrismaClient } from '@prisma/client';
-
 export interface ResponseType {
   message: string;
 }

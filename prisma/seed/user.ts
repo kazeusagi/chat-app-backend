@@ -11,13 +11,13 @@ export async function user(prisma: PrismaClient) {
     },
     {
       id: 2,
-      name: 'player',
-      roleId: RoleEnum.user,
+      name: 'assistant',
+      roleId: RoleEnum.assistant,
     },
     {
       id: 3,
-      name: 'assistant',
-      roleId: RoleEnum.assistant,
+      name: 'user',
+      roleId: RoleEnum.user,
     },
   ];
 
